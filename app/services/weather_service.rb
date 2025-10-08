@@ -14,16 +14,19 @@ class WeatherService
       appid: ENV['FORECAST_API_KEY'],
       units: 'metric'
     })
-    debugger
     return nil unless response.success?
 
     data = response.parsed_response
+    
     {
       temperature: data.dig('main', 'temp'),
       high: data.dig('main', 'temp_max'),
       low: data.dig('main', 'temp_min'),
+      humidity: data.dig('main', 'humidity'),
+      wind_speed: data.dig('wind', 'speed'),
+      sunrise: Time.at(data.dig('sys', 'sunrise'), in: data.dig('timezone')),
+      sunset: Time.at(data.dig('sys', 'sunset'), in: data.dig('timezone')),
       description: data.dig('weather', 0, 'description')
     }
   end  
 end 
-#19.310711618138406, 84.77851367075601

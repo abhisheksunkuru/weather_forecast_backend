@@ -8,7 +8,7 @@ class ForecastsController < ApplicationController
     forecast_data = Rails.cache.fetch(cache_key, expires_in: 30.minutes) do
       geocode = GeocodeService.new(address).call
       next nil unless geocode
-      WeatherService.new(geocode[:lat], geocode[:lng]).current_weather
+      WeatherService.new(geocode[:lat], geocode[:lng]).current_state
     end
     if forecast_data
       render json: { cached: !Rails.cache.read(cache_key).nil?, forecast: forecast_data }
